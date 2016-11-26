@@ -1,4 +1,4 @@
-defmodule Mustachex do
+defmodule Mustache do
   @moduledoc """
   Mustache is a logic-less templates.
   See [mustache(5) -- Logic-less templates.](http://mustache.github.io/mustache.5.html) for more details
@@ -17,7 +17,7 @@ defmodule Mustachex do
   end
 
   def compile_string(source, bindings, options \\ []) do
-    Mustachex.Compiler.compile(source, bindings, options)
+    Mustache.Compiler.compile(source, bindings, options)
   end
 
 end

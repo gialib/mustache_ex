@@ -1,4 +1,4 @@
-defmodule Mustachex.Utils do
+defmodule Mustache.Utils do
   @moduledoc false
 
   def to_binary(other), do: Kernel.to_string(other)

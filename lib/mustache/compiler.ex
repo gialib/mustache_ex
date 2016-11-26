@@ -1,27 +1,27 @@
-defmodule Mustachex.Compiler do
+defmodule Mustache.Compiler do
 
   def compile(source, bindings, options) do
-    tokens = Mustachex.Tokenizer.tokenize(source)
+    tokens = Mustache.Tokenizer.tokenize(source)
     partials = options[:partials] || []
-    partials = Enum.map partials, fn({ k,partial}) -> { k, Mustachex.Tokenizer.tokenize(partial) } end
+    partials = Enum.map partials, fn({ k,partial}) -> { k, Mustache.Tokenizer.tokenize(partial) } end
     build(tokens, bindings, [partials: partials, root: bindings]) |> List.flatten |> Enum.join
   end
 
   def escape(value) do
-    value |> Mustachex.Utils.to_binary |> Mustachex.Utils.escape_html
+    value |> Mustache.Utils.to_binary |> Mustache.Utils.escape_html
   end
 
   def get_value(nil, _, _ ), do: nil
   def get_value(val, :., _) when is_bitstring(val), do: val
   def get_value(bindings, name, root) when is_map(bindings) and is_atom(name) do
-    ret = bindings[name]
-    if ret==nil do
-      ret = bindings[Atom.to_string(name)]
-      if ret == nil and root != nil do
+    cond do
+      bindings[name] != nil ->
+        bindings[name] 
+      bindings[Atom.to_string(name)] == nil and root != nil ->
         get_value(root, name, nil)
-      end
+      true ->
+        bindings[name] 
     end
-    ret
   end
   def get_value(bindings, name, root) when is_map(bindings) and is_list(name) do
     Enum.reduce(name, bindings, fn(name, acc) ->
@@ -58,17 +58,19 @@ defmodule Mustachex.Compiler do
     bind = get_value(bindings, name, opts[:root])
     idx = Enum.find_index(rest, fn(e) -> {:end_section, name} == e end)
     elements = Enum.take(rest, idx)
-    if is_list(bind) do
-      ret = Enum.map(bind, fn(b) ->
+
+    ret = if is_list(bind) do
+      Enum.map(bind, fn(b) ->
                        build(elements, b, opts)
                      end)
     else
       if bind != nil and bind != false do
-        ret = build(elements, bind, opts)
+        build(elements, bind, opts)
       else
-        ret = ""
+        ""
       end
     end
+
     rest = Enum.drop(rest, idx+1)
     [ret] ++ build(rest, bindings, opts)
   end
@@ -77,18 +79,20 @@ defmodule Mustachex.Compiler do
     bind = get_value(bindings, name, opts[:root])
     idx = Enum.find_index(rest, fn(e) -> {:end_section, name} == e end)
     elements = Enum.take(rest, idx)
-    if bind == nil or bind == [] or bind == false do
-      ret = build(elements, bind, opts)
+    ret = if bind == nil or bind == [] or bind == false do
+      build(elements, bind, opts)
+    else
+      ""
     end
     [ret] ++ build(Enum.drop(rest, idx+1), bindings, opts)
   end
 
   def build([{:partial,name, _}|rest], bindings, opts) do
     partial = opts[:partials][name]
-    if partial != nil do
-      ret = build(partial, bindings, opts)
+    ret = if partial != nil do
+      build(partial, bindings, opts)
     else
-      ret = ""
+      ""
     end
     [ret] ++ build(rest, bindings, opts)
   end

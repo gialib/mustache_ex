@@ -1,10 +1,10 @@
-defmodule Mustachex.Mixfile do
+defmodule Mustache.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :mustachex,
+    [app: :mustache,
      version: "0.0.1",
-     elixir: "~> 1.0.0",
+     elixir: "~> 1.3.0",
      deps: deps,
      description: description,
      package: package]
@@ -37,6 +37,6 @@ defmodule Mustachex.Mixfile do
   def package do
     [ contributors: ["jui"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/jui/mustachex"}]
+      links: %{"GitHub" => "https://github.com/jui/mustache"}]
   end
 end
