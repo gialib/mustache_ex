@@ -20,4 +20,9 @@ defmodule Mustache do
     Mustache.Compiler.compile(source, bindings, options)
   end
 
+  def render_view(view, filename, bindings \\ [], options \\ []) do
+    {:safe, template} = view.render filename
+
+    render_string(IO.iodata_to_binary(template), bindings, options)
+  end
 end
