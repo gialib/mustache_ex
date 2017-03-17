@@ -110,6 +110,54 @@ defmodule MustacheTest do
     assert Mustache.render("Hello, {{>name}}", [n: "Mustache"], partials: [name: "{{n}}"]) == "Hello, Mustache"
   end
 
+  test "render with boolean true" do
+    template = """
+Hello {{name}}
+You have just won {{value}} dollars!
+{{#in_ca}}
+Well, {{taxed_value}} dollars, after taxes.
+{{/in_ca}}
+    """
+
+    expected = """
+    Hello Chris
+    You have just won 10000 dollars!
+
+    Well, 6.0e3 dollars, after taxes.
+
+    """
+
+    assert Mustache.render(template, %{
+      name: "Chris",
+      value: 10000,
+      taxed_value: 10000 - (10000 * 0.4),
+      in_ca: true
+    }) == expected
+  end
+
+  test "render with boolean false" do
+    template = """
+Hello {{name}}
+You have just won {{value}} dollars!
+{{#in_ca}}
+Well, {{taxed_value}} dollars, after taxes.
+{{/in_ca}}
+    """
+
+    expected = """
+    Hello Chris
+    You have just won 10000 dollars!
+
+    """
+
+    assert Mustache.render(template, %{
+      name: "Chris",
+      value: 10000,
+      taxed_value: 10000 - (10000 * 0.4),
+      in_ca: false
+    }) == expected
+  end
+
   test "render looooong using lists" do
     template = """
     {{! ignore this line! }}

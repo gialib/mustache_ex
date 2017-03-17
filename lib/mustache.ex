@@ -12,6 +12,10 @@ defmodule Mustache do
     compile_string(source, bindings, options)
   end
 
+  def render_safe_template({:safe, template}, bindings \\ [], options \\ []) do
+    render_string(IO.iodata_to_binary(template), bindings, options)
+  end
+
   def render_file(filename, bindings \\ [], options \\ []) do
     compile_string(File.read!(filename), bindings, options)
   end
@@ -21,8 +25,6 @@ defmodule Mustache do
   end
 
   def render_view(view, filename, bindings \\ [], options \\ []) do
-    {:safe, template} = view.render filename
-
-    render_string(IO.iodata_to_binary(template), bindings, options)
+    render_safe_template(view.render(filename), bindings, options)
   end
 end
