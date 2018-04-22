@@ -4,7 +4,7 @@ defmodule Mustache.Mixfile do
   def project do
     [app: :mustache,
      version: "0.0.2",
-     elixir: "~> 1.5.2",
+     elixir: "~> 1.5",
      deps: deps(),
      description: description(),
      package: package()]

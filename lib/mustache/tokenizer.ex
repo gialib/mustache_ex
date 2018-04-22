@@ -2,7 +2,7 @@ defmodule Mustache.Tokenizer do
   @moduledoc false
 
   def tokenize(template) when is_binary(template) do
-    tokenize(String.to_char_list(template))
+    tokenize(String.to_charlist(template))
   end
 
   def tokenize(template) when is_list(template) do

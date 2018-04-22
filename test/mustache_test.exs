@@ -112,11 +112,11 @@ defmodule MustacheTest do
 
   test "render with boolean true" do
     template = """
-Hello {{name}}
-You have just won {{value}} dollars!
-{{#in_ca}}
-Well, {{taxed_value}} dollars, after taxes.
-{{/in_ca}}
+    Hello {{name}}
+    You have just won {{value}} dollars!
+    {{#in_ca}}
+    Well, {{taxed_value}} dollars, after taxes.
+    {{/in_ca}}
     """
 
     expected = """
@@ -137,11 +137,11 @@ Well, {{taxed_value}} dollars, after taxes.
 
   test "render with boolean false" do
     template = """
-Hello {{name}}
-You have just won {{value}} dollars!
-{{#in_ca}}
-Well, {{taxed_value}} dollars, after taxes.
-{{/in_ca}}
+    Hello {{name}}
+    You have just won {{value}} dollars!
+    {{#in_ca}}
+    Well, {{taxed_value}} dollars, after taxes.
+    {{/in_ca}}
     """
 
     expected = """
